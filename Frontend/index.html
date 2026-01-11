@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Strip - Medical Registration</title>
+    <link rel="icon" href="https://img.icons8.com/fluency/48/000000/doctor.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Modern Color Palette */
+            --primary: #0F62FE;
+            /* IBM Blue */
+            --primary-dark: #0043CE;
+            --primary-light: #E8F0FE;
+            --secondary: #393939;
+            --success: #198754;
+            --danger: #DC3545;
+            --background: #f4f7f6;
+            --surface: #ffffff;
+            --border: #dde2e5;
+            --text-main: #212529;
+            --text-light: #6c757d;
+
+            /* Glassmorphism Variables */
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(216, 65%, 88%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(219, 57%, 89%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(216, 50%, 87%, 1) 0, transparent 50%);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Header Design */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+            background: linear-gradient(-45deg, #0F62FE, #0043CE);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #64748b;
+        }
+
+        /* Main Card */
+        .form-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--glass-shadow);
+            padding: 50px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            overflow: hidden;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #60a5fa);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .form-section:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .form-section:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .form-section:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+
+        .form-section:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .section-header h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        /* Inputs & Labels */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 0px;
+            /* Gap handles spacing */
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .required::after {
+            content: "*";
+            color: var(--danger);
+            margin-left: 4px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #1e293b;
+            background: #fff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.1);
+            transform: translateY(-1px);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* File Upload */
+        .upload-container {
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f8fafc;
+            position: relative;
+        }
+
+        .upload-container:hover {
+            border-color: var(--primary);
+            background: #f1f5f9;
+        }
+
+        .upload-container input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .image-preview-box {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-preview-box img {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: none;
+            object-fit: cover;
+        }
+
+        .file-list {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        /* Buttons */
+        .submit-btn {
+            background: linear-gradient(135deg, #0F62FE 0%, #0043CE 100%);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 18px 36px;
+            border: none;
+            border-radius: 16px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(15, 98, 254, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(15, 98, 254, 0.35);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #e2e8f0;
+            color: #475569;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+
+        /* Validation & Errors */
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 6px;
+            display: none;
+            animation: shake 0.4s ease-in-out;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .error-msg i {
+            font-size: 10px;
+        }
+
+        /* Success Card */
+        .success-card {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #d1fae5;
+            color: #059669;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 25px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+            animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .preview-item strong {
+            display: block;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .preview-item span {
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-4px);
+            }
+
+            75% {
+                transform: translateX(4px);
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+            }
+
+            70% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Improved Preview Modal Styles */
+        .preview-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .preview-profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-light);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-section-title {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin: 20px 0 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preview-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .preview-label {
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .preview-value {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* Tag Input Styles */
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: #fff;
+            min-height: 52px;
+            cursor: text;
+            transition: all 0.3s;
+        }
+
+        .tag-container:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.1);
+        }
+
+        .tag {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag i {
+            cursor: pointer;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .tag i:hover {
+            opacity: 1;
+        }
+
+        .tag-input {
+            border: none !important;
+            outline: none !important;
+            padding: 5px !important;
+            box-shadow: none !important;
+            flex: 1;
+            min-width: 150px;
+            font-size: 0.95rem;
+        }
+
+        /* Password Toggle */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .password-icon:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Dr. Strip</h1>
+            <p>Join the world's leading digital healthcare platform</p>
+        </header>
+
+        <div class="form-container" id="mainCard">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <form id="registrationForm" novalidate>
+                <!-- 1. Personal Details -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-user-md"></i></div>
+                        <h3>Personal Information</h3>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name" class="required">Full Name</label>
+                            <input type="text" id="name" name="name" placeholder="Dr. John Doe" required>
+                            <div class="error-msg"><i class="fas fa-exclamation-circle"></i> Name is required</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email" class="required">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                            <div class="error-msg"><i class="fas fa-exclamation-circle"></i> Valid email is required
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="required">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" required>
+                            <div class="error-msg"><i class="fas fa-exclamation-circle"></i> Phone number is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="specialization" class="required">Specialization</label>
+                            <select id="specialization" name="specialization" required>
+                                <option value="">Select Specialization</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Dermatology">Dermatology</option>
+                                <option value="Endocrinology">Endocrinology</option>
+                                <option value="General Medicine">General Medicine</option>
+                                <option value="Neurology">Neurology</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                                <option value="Psychiatry">Psychiatry</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="error-msg"><i class="fas fa-exclamation-circle"></i> Please select a
+                                specialization</div>
+                        </div>
+                        <!-- Hidden field for 'Other' -->
+                        <div class="form-group" id="otherSpecField" style="display:none;">
+                            <label for="other_specialization">Specify Specialization</label>
+                            <input type="text" id="other_specialization" name="other_specialization"
+                                placeholder="e.g. Immunology">
+                        </div>
+                    </div>
+                    <!-- Languages Spoken -->
+                    <div class="form-group">
+                        <label class="required">Languages Spoken</label>
+                        <div class="tag-container" id="languageContainer"
+                            onclick="document.getElementById('langInput').focus()">
+                            <!-- Tags will appear here -->
+                            <input type="text" class="tag-input" id="langInput"
+                                placeholder="Type language & hit Enter (e.g. English)">
+                        </div>
+                        <input type="hidden" name="languages" id="languagesHidden">
+                        <div class="error-msg" id="langError"><i class="fas fa-exclamation-circle"></i> Please add at
+                            least
+                            one language</div>
+                        <div style="font-size:0.8rem; color:#94a3b8; margin-top:5px;">Common: English, Spanish, Hindi,
+                            Telugu, French</div>
+                    </div>
+                </div>
+
+                <!-- 2. Hospital & Location -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-hospital-alt"></i></div>
+                        <h3>Hospital & Location</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hospital_name" class="required">Hospital / Clinic Name</label>
+                        <input type="text" id="hospital_name" name="hospital_name" placeholder="e.g. Apollo Hospital"
+                            required>
+                        <div class="error-msg"><i class="fas fa-exclamation-circle"></i> Hospital name is required</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="hospital_pincode" class="required">Pincode</label>
+                            <input type="text" id="hospital_pincode" name="hospital_pincode" placeholder="e.g. 500081"
+                                maxlength="6" required>
+                            <div class="error-msg"><i class="fas fa-exclamation-circle"></i> Valid pincode is required
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hospital_village">Village / Area</label>
+                            <select id="hospital_village" name="hospital_village">
+                                <option value="">Auto-filled based on Pincode</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="hospital_city">City</label>
+                            <input type="text" id="hospital_city" name="hospital_city" readonly
+                                style="background-color: #f8fafc;">
+                        </div>
+                        <div class="form-group">
+                            <label for="hospital_state">State</label>
+                            <input type="text" id="hospital_state" name="hospital_state" readonly
+                                style="background-color: #f8fafc;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Education Details -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h3>Education Details</h3>
+                    </div>
+
+                    <div id="educationContainer">
+                        <!-- Dynamic Rows go here -->
+                    </div>
+
+                    <button type="button" class="btn-outline" id="addEducationBtn"
+                        style="margin-top: 15px; border-style: dashed;">
+                        <i class="fas fa-plus"></i> Add Qualification
+                    </button>
+                    <div class="error-msg" id="eduError" style="margin-top:10px;"><i
+                            class="fas fa-exclamation-circle"></i> At
+                        least one qualification is required</div>
+                </div>
+
+                <!-- 4. Professional Details -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-certificate"></i></div>
+                        <h3>Professional Verification</h3>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="license_year" class="required">License Year</label>
+                            <input type="number" id="license_year" name="license_year" placeholder="e.g. 2015"
+                                min="1950" max="2025" required>
+                            <div class="error-msg"><i class="fas fa-exclamation-circle"></i> Valid year required</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="experience">Experience (Years)</label>
+                            <input type="text" id="experience" name="experience" readonly
+                                style="background-color: #f8fafc;">
+                        </div>
+                    </div>
+
+                    <!-- Profile Image Upload -->
+                    <div class="form-group">
+                        <label class="required">Profile Photo</label>
+                        <div class="upload-container" id="profileUploadArea">
+                            <div class="upload-icon"><i class="fas fa-camera"></i></div>
+                            <p style="color:#64748b; font-weight:500;">Click to upload profile photo</p>
+                            <p style="font-size:0.8rem; color:#94a3b8;">Supports: JPG, PNG, GIF, WEBP</p>
+                            <input type="file" id="profile_image" name="profile_image"
+                                accept="image/png, image/jpeg, image/jpg, image/gif, image/webp" required>
+                        </div>
+                        <div class="image-preview-box">
+                            <img id="profilePreview" src="" alt="Profile Preview">
+                        </div>
+                    </div>
+
+                    <!-- Documents Upload -->
+                    <div class="form-group">
+                        <label class="required">License / Certificates</label>
+                        <div class="upload-container" style="padding: 20px;">
+                            <span style="color:var(--primary); font-weight:600;"><i class="fas fa-cloud-upload-alt"></i>
+                                Upload Documents</span>
+                            <input type="file" id="documents" name="documents" multiple accept=".pdf,.jpg,.png"
+                                required>
+                        </div>
+                        <div class="file-list" id="documentList"></div>
+                        <div class="error-msg" id="docError"><i class="fas fa-exclamation-circle"></i> Please upload
+                            verification documents</div>
+                    </div>
+                </div>
+
+                <!-- 5. Account Security -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>Account Security</h3>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password" class="required">Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="password" name="password" required minlength="8"
+                                    placeholder="••••••••">
+                                <i class="fas fa-eye password-icon" onclick="togglePassword('password', this)"></i>
+                            </div>
+                            <div class="error-msg"><i class="fas fa-exclamation-circle"></i> Min 8 chars required</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password" class="required">Confirm Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="confirm_password" name="confirm_password" required
+                                    placeholder="••••••••">
+                                <i class="fas fa-eye password-icon"
+                                    onclick="togglePassword('confirm_password', this)"></i>
+                            </div>
+                            <div class="error-msg"><i class="fas fa-exclamation-circle"></i> Passwords must match</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="previewBtn">
+                    Review Application <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- Success Message -->
+            <div class="success-card" id="successCard">
+                <div class="success-icon"><i class="fas fa-check"></i></div>
+                <h2 style="color:#1e293b; margin-bottom:10px;">Registration Successful!</h2>
+                <p style="color:#64748b; margin-bottom:30px;">Your application has been submitted and your doctor
+                    profile is now active.</p>
+
+                <div style="background:#f1f5f9; padding:20px; border-radius:12px; margin-bottom:30px;">
+                    <p style="font-size:0.9rem; color:#64748b;">YOUR DOCTOR ID</p>
+                    <h3 id="displayId"
+                        style="font-size:2rem; color:var(--primary); letter-spacing:2px; margin-top:5px;">-
+                    </h3>
+                </div>
+
+                <button onclick="location.reload()" class="submit-btn"
+                    style="background: white; color: var(--primary); border: 2px solid #e2e8f0; box-shadow:none;">
+                    Register Another Doctor
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal-content">
+            <h2 style="font-family:'Outfit', sans-serif; color:#1e293b; margin-bottom:20px;">Review Application</h2>
+            <div style="width:100%; height:1px; background:#e2e8f0; margin-bottom:20px;"></div>
+
+            <div class="preview-grid" id="previewContent">
+                <!-- Content injected via JS -->
+            </div>
+
+            <div style="display:flex; gap:15px; margin-top:30px;">
+                <button class="btn-outline" style="flex:1" onclick="closeModal()">Edit Details</button>
+                <button class="submit-btn" style="flex:1" onclick="finalSubmit()">Confirm Registration</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:5000/api';
+        let formDataGlobal = null;
+        let languages = [];
+
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // --- Language Tag Logic ---
+        const langContainer = document.getElementById('languageContainer');
+        const langInput = document.getElementById('langInput');
+
+        langInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const val = this.value.trim();
+                if (val && !languages.includes(val)) {
+                    addLanguage(val);
+                }
+                this.value = '';
+            }
+        });
+
+        // Add comma support
+        langInput.addEventListener('input', function (e) {
+            if (this.value.includes(',')) {
+                const parts = this.value.split(',');
+                parts.forEach(p => {
+                    const tag = p.trim();
+                    if (tag && !languages.includes(tag)) addLanguage(tag);
+                });
+                this.value = '';
+            }
+        });
+
+        function addLanguage(lang) {
+            languages.push(lang);
+            renderTags();
+            updateHiddenLang();
+        }
+
+        function removeLanguage(lang) {
+            languages = languages.filter(l => l !== lang);
+            renderTags();
+            updateHiddenLang();
+        }
+
+        function renderTags() {
+            // Remove existing tags only (keep input)
+            const tags = langContainer.querySelectorAll('.tag');
+            tags.forEach(t => t.remove());
+
+            languages.forEach(lang => {
+                const span = document.createElement('span');
+                span.className = 'tag';
+                span.innerHTML = `${lang} <i class="fas fa-times" onclick="removeLanguage('${lang}')"></i>`;
+                langContainer.insertBefore(span, langInput);
+            });
+        }
+
+        function updateHiddenLang() {
+            const hidden = document.getElementById('languagesHidden');
+            hidden.value = languages.join(', ');
+            updateProgress();
+
+            // Validation visual update
+            if (languages.length > 0) {
+                document.getElementById('langError').style.display = 'none';
+                langContainer.style.borderColor = '#e2e8f0';
+            }
+        }
+
+        // --- Interaction Logic ---
+
+        // Education Logic
+        let eduCount = 0;
+
+        // --- Dynamic College Search Logic ---
+        const COLLEGE_DATA = {
+            'MBBS': ['AIIMS New Delhi', 'CMC Vellore', 'JIPMER Pondicherry', 'KGMU Lucknow', 'Madras Medical College', 'Maulana Azad Medical College', 'Grant Medical College', 'Bangalore Medical College', 'Osmania Medical College', 'Sri Ramachandra Medical College'],
+            'BDS': ['Maulana Azad Institute of Dental Sciences', 'Manipal College of Dental Sciences', 'Government Dental College Mumbai', 'Nair Hospital Dental College', 'Faculty of Dental Sciences, IMS BHU'],
+            'MD': ['AIIMS New Delhi', 'PGIMER Chandigarh', 'CMC Vellore', 'Sanjay Gandhi Postgraduate Institute', 'NIMHANS Bangalore'],
+            'MS': ['AIIMS New Delhi', 'JIPMER', 'KEM Hospital Mumbai', 'Madras Medical College'],
+            'DNB': ['Ganga Hospital', 'Apollo Hospitals', 'Max Super Speciality Hospital', 'Fortis Healthcare'],
+            'BAMS': ['National Institute of Ayurveda', 'Institute of Medical Sciences BHU', 'Gujarat Ayurved University'],
+            'BHMS': ['National Institute of Homoeopathy', 'Nehru Homoeopathic Medical College']
+        };
+
+        function addEducationRow() {
+            const container = document.getElementById('educationContainer');
+            const index = eduCount++;
+            const rowId = `edu_row_${index}`;
+
+            const rowHtml = `
+                <div class="form-row education-row" id="${rowId}" style="margin-bottom: 15px; align-items: flex-end;">
+                    <div class="form-group" style="flex: 1;">
+                        <label class="required">Degree</label>
+                        <input type="text" name="edu_degree" list="degree_list_${index}" 
+                               placeholder="e.g. MBBS" required onchange="updateColleges(this, ${index})">
+                        <datalist id="degree_list_${index}">
+                            <option value="MBBS">
+                            <option value="BDS">
+                            <option value="MD">
+                            <option value="MS">
+                            <option value="DNB">
+                            <option value="BAMS">
+                            <option value="BHMS">
+                        </datalist>
+                    </div>
+                    <div class="form-group" style="flex: 2;">
+                        <label class="required">College/University</label>
+                        <input type="text" name="edu_college" list="college_list_${index}" 
+                               placeholder="e.g. AIIMS" required>
+                        <datalist id="college_list_${index}">
+                            <!-- Populated dynamically -->
+                        </datalist>
+                    </div>
+                    <div class="form-group" style="flex: 0.5;">
+                        <label class="required">Year</label>
+                        <input type="number" name="edu_year" placeholder="2010" min="1950" max="2030" required>
+                    </div>
+                    ${index > 0 ? `<button type="button" onclick="removeEducationRow(${index})" style="background:var(--danger); color:white; border:none; padding:12px; border-radius:12px; height:52px; width:52px; cursor:pointer; margin-bottom:25px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-trash"></i></button>` : '<div style="width:52px"></div>'}
+                </div>
+            `;
+            const div = document.createElement('div');
+            div.innerHTML = rowHtml;
+            container.appendChild(div.firstElementChild);
+
+            // Re-attach validation listeners
+            div.querySelectorAll('input').forEach(input => {
+                input.addEventListener('change', updateProgress);
+                input.addEventListener('input', updateProgress);
+            });
+        }
+
+        // Expose for usage
+        window.updateColleges = function (degreeInput, index) {
+            const degree = degreeInput.value.toUpperCase();
+            const collegeList = document.getElementById(`college_list_${index}`);
+            collegeList.innerHTML = ''; // Clear previous
+
+            // Find matching key (handling variations like M.B.B.S)
+            const key = Object.keys(COLLEGE_DATA).find(k => degree.includes(k));
+
+            if (key && COLLEGE_DATA[key]) {
+                COLLEGE_DATA[key].forEach(college => {
+                    const opt = document.createElement('option');
+                    opt.value = college;
+                    collegeList.appendChild(opt);
+                });
+            }
+        };
+
+        // Expose to window for inline onclick
+        window.removeEducationRow = function (index) {
+            const row = document.getElementById(`edu_row_${index}`);
+            if (row) row.remove();
+            updateProgress();
+        };
+
+        // Initialize first row
+        addEducationRow();
+        document.getElementById('addEducationBtn').addEventListener('click', addEducationRow);
+
+        // Profile Preview
+        // Profile Preview
+        document.getElementById('profile_image').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.getElementById('profilePreview');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Document Listing
+        document.getElementById('documents').addEventListener('change', function (e) {
+            const list = document.getElementById('documentList');
+            list.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+
+                let icon = 'fa-file';
+                let color = 'var(--text-light)';
+
+                if (file.type.includes('pdf')) {
+                    icon = 'fa-file-pdf';
+                    color = '#ef4444'; // Red for PDF
+                } else if (file.type.includes('image')) {
+                    icon = 'fa-file-image';
+                    color = '#3b82f6'; // Blue for Images
+                }
+
+                div.innerHTML = `<i class="fas ${icon}" style="color:${color}; font-size:1.1rem;"></i> 
+                                 <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${file.name}</span>
+                                 <span style="font-size:0.75rem; color:#94a3b8;">${(file.size / 1024 / 1024).toFixed(2)} MB</span>`;
+                list.appendChild(div);
+            });
+        });
+
+        // Experience Calculator
+        document.getElementById('license_year').addEventListener('input', function (e) {
+            const year = parseInt(e.target.value);
+            const currentYear = new Date().getFullYear();
+            const expField = document.getElementById('experience');
+
+            if (year && year >= 1950 && year <= currentYear) {
+                expField.value = currentYear - year;
+            } else {
+                expField.value = '';
+            }
+        });
+
+        // Pincode Auto-fill
+        document.getElementById('hospital_pincode').addEventListener('input', async function (e) {
+            const pin = e.target.value;
+            if (pin.length === 6) {
+                try {
+                    const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
+                    const data = await res.json();
+
+                    if (data[0].Status === 'Success') {
+                        const info = data[0].PostOffice[0];
+                        document.getElementById('hospital_city').value = info.District;
+                        document.getElementById('hospital_state').value = info.State;
+
+                        const villageSelect = document.getElementById('hospital_village');
+                        villageSelect.innerHTML = '<option value="">Select Village</option>';
+                        data[0].PostOffice.forEach(po => {
+                            const opt = document.createElement('option');
+                            opt.value = po.Name;
+                            opt.textContent = po.Name;
+                            villageSelect.appendChild(opt);
+                        });
+                    }
+                } catch (err) {
+                    console.error("Pincode fetch failed", err);
+                }
+            }
+        });
+
+        // Progress Bar
+        const formInputs = document.querySelectorAll('input, select');
+        formInputs.forEach(input => {
+            input.addEventListener('change', updateProgress);
+            input.addEventListener('input', updateProgress);
+        });
+
+        function updateProgress() {
+            const total = formInputs.length;
+            let filled = 0;
+            formInputs.forEach(input => {
+                if (input.value !== '') filled++;
+            });
+            const pct = (filled / total) * 100;
+            document.getElementById('progressBar').style.width = `${pct}%`;
+        }
+
+        // --- Form Submission ---
+
+        document.getElementById('registrationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (validateForm()) {
+                formDataGlobal = new FormData(this);
+
+                // Process Education Data
+                const degrees = document.getElementsByName('edu_degree');
+                const colleges = document.getElementsByName('edu_college');
+                const years = document.getElementsByName('edu_year');
+                let eduList = [];
+
+                for (let i = 0; i < degrees.length; i++) {
+                    if (degrees[i].value) {
+                        eduList.push(`${degrees[i].value} from ${colleges[i].value} (${years[i].value})`);
+                    }
+                }
+
+                if (eduList.length === 0) {
+                    document.getElementById('eduError').style.display = 'block';
+                    return;
+                }
+
+                // Validate Languages
+                if (languages.length === 0) {
+                    document.getElementById('langError').style.display = 'flex';
+                    document.getElementById('languageContainer').style.borderColor = 'var(--danger)';
+                    return;
+                }
+
+                formDataGlobal.set('education', eduList.join('; '));
+                formDataGlobal.set('languages', languages.join(', '));
+
+                showPreview();
+            }
+        });
+
+        function validateForm() {
+            let isValid = true;
+            const requiredInputs = document.querySelectorAll('[required]');
+
+            requiredInputs.forEach(input => {
+                const errorMsg = input.parentElement.querySelector('.error-msg');
+                if (!input.value.trim()) {
+                    if (errorMsg) errorMsg.style.display = 'flex';
+                    input.style.borderColor = 'var(--danger)';
+                    isValid = false;
+                } else {
+                    if (errorMsg) errorMsg.style.display = 'none';
+                    input.style.borderColor = '#e2e8f0';
+                }
+            });
+
+            // Specific checks
+            const pwd = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+
+            if (pwd !== confirm && pwd) {
+                alert("Passwords do not match");
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function showPreview() {
+            const modal = document.getElementById('previewModal');
+            const content = document.getElementById('previewContent');
+            const fd = formDataGlobal;
+
+            // Get Image Src
+            const imgSrc = document.getElementById('profilePreview').src;
+            const name = document.getElementById('name').value;
+            const specialization = document.getElementById('specialization').value === 'Other' ?
+                document.getElementById('other_specialization').value :
+                document.getElementById('specialization').value;
+
+            // Format Location
+            const village = document.getElementById('hospital_village').value;
+            const city = document.getElementById('hospital_city').value;
+            const state = document.getElementById('hospital_state').value;
+            const pincode = document.getElementById('hospital_pincode').value;
+            const fullLocation = `${village ? village + ', ' : ''}${city}, ${state} - <strong>${pincode}</strong>`;
+
+            content.innerHTML = `
+                <div class="preview-header">
+                    <img src="${imgSrc}" class="preview-profile-img" alt="Profile">
+                    <div>
+                        <h3 style="color:#1e293b; font-size:1.4rem;">${name}</h3>
+                        <p style="color:var(--primary); font-weight:500;">${specialization}</p>
+                    </div>
+                </div>
+
+                <div class="preview-section-title"><i class="fas fa-user-md"></i> Personal & Professional</div>
+                <div class="preview-row">
+                    <div>
+                        <div class="preview-label">Email</div>
+                        <div class="preview-value">${document.getElementById('email').value}</div>
+                    </div>
+                    <div>
+                        <div class="preview-label">Phone</div>
+                        <div class="preview-value">${document.getElementById('phone').value}</div>
+                    </div>
+                </div>
+                <div class="preview-row">
+                    <div>
+                        <div class="preview-label">Experience</div>
+                        <div class="preview-value">${document.getElementById('experience').value} Years</div>
+                    </div>
+                    <div>
+                        <div class="preview-label">License Year</div>
+                        <div class="preview-value">${document.getElementById('license_year').value}</div>
+                    </div>
+                </div>
+                <div style="margin-top:10px;">
+                    <div class="preview-label">Languages</div>
+                    <div class="preview-value">${languages.join(', ') || '-'}</div>
+                </div>
+
+                <div class="preview-section-title"><i class="fas fa-hospital-alt"></i> Hospital Details</div>
+                <div style="margin-bottom:10px;">
+                    <div class="preview-label">Hospital Name</div>
+                    <div class="preview-value">${document.getElementById('hospital_name').value}</div>
+                </div>
+                <div>
+                    <div class="preview-label">Location</div>
+                    <div class="preview-value">${fullLocation}</div>
+                </div>
+
+                <div class="preview-section-title"><i class="fas fa-graduation-cap"></i> Education</div>
+                <div class="preview-value" style="line-height:1.6;">
+                    ${fd.get('education') ? fd.get('education').split('; ').map(e => `• ${e}`).join('<br>') : '-'}
+                </div>
+            `;
+
+            // Override grid style for this custom layout
+            content.style.display = 'block';
+
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        async function finalSubmit() {
+            const submitBtn = document.querySelector('#previewModal .submit-btn');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            try {
+                const res = await fetch(`${API_BASE}/doctors/register`, {
+                    method: 'POST',
+                    body: formDataGlobal
+                });
+                const data = await res.json();
+
+                closeModal();
+
+                if (data.success) {
+                    document.getElementById('registrationForm').style.display = 'none';
+                    document.getElementById('successCard').style.display = 'block';
+                    document.getElementById('displayId').textContent = data.display_id || 'DOC-' + data.doctor_id;
+                    document.querySelector('.progress-bar').style.background = 'var(--success)';
+                } else {
+                    alert('Registration Failed: ' + data.message);
+                }
+            } catch (err) {
+                alert('Server Error: ' + err.message);
+                console.error(err);
+            } finally {
+                submitBtn.innerHTML = 'Confirm Registration';
+            }
+        }
+
+        // Spec toggle
+        document.getElementById('specialization').addEventListener('change', function () {
+            const otherDiv = document.getElementById('otherSpecField');
+            if (this.value === 'Other') {
+                otherDiv.style.display = 'block';
+            } else {
+                otherDiv.style.display = 'none';
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
